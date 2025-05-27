@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Testklasse für die AuthMiddleware-Funktionalität mit echten HTTP-Anfragen.
- * Diese Tests überprüfen die Token-basierte Authentifizierung für geschützte Endpunkte.
+ * Diese Tests überprüfen die tokenbasierte Authentifizierung für geschützte Endpunkte.
  */
 class AuthMiddlewareTest {
 
@@ -70,12 +70,12 @@ class AuthMiddlewareTest {
      */
     @Test
     void testTokenManagerFunctions() {
-        // Test token generation
+        // Teste die Token-Generierung
         String token = ApiServer.TokenManager.generateToken("newuser");
         assertNotNull(token);
         assertTrue(ApiServer.TokenManager.isValidToken(token));
         
-        // Test token invalidation
+        // Teste die Token-Invalidierung
         ApiServer.TokenManager.invalidateToken(token);
         assertFalse(ApiServer.TokenManager.isValidToken(token));
     }
@@ -86,23 +86,23 @@ class AuthMiddlewareTest {
      */
     @Test
     void testProtectedEndpointWithValidToken() throws IOException {
-        // Start the server
+        // Starte den Server
         startServer();
         
-        // Create a request to a protected endpoint
+        // Erstelle eine Anfrage an einen geschützten Endpunkt
         URL url = new URL("http://localhost:" + TEST_PORT + "/api/folders");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         
-        // Add the valid token
+        // Füge das gültige Token hinzu
         connection.setRequestProperty("Authorization", validToken);
         
-        // Send the request
+        // Sende die Anfrage
         int responseCode = connection.getResponseCode();
         
-        // We expect a response, possibly 200 OK if the endpoint works
-        // or possibly another code if the endpoint has other requirements,
-        // but definitely not 401 Unauthorized
+        // Wir erwarten eine Antwort, möglicherweise 200 OK, wenn der Endpunkt funktioniert
+        // oder möglicherweise einen anderen Code, wenn der Endpunkt andere Anforderungen hat,
+        // aber auf keinen Fall 401 Unauthorized
         assertNotEquals(401, responseCode, "Should not get 401 Unauthorized with valid token");
     }
     
@@ -112,21 +112,21 @@ class AuthMiddlewareTest {
      */
     @Test
     void testProtectedEndpointWithInvalidToken() throws IOException {
-        // Start the server
+        // Starte den Server
         startServer();
         
-        // Create a request to a protected endpoint
+        // Erstelle eine Anfrage an einen geschützten Endpunkt
         URL url = new URL("http://localhost:" + TEST_PORT + "/api/folders");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         
-        // Add an invalid token
+        // Füge ein ungültiges Token hinzu
         connection.setRequestProperty("Authorization", "invalid-token");
         
-        // Send the request
+        // Sende die Anfrage
         int responseCode = connection.getResponseCode();
         
-        // We expect a 401 Unauthorized response
+        // Wir erwarten eine 401 Unauthorized-Antwort
         assertEquals(401, responseCode, "Should get 401 Unauthorized with invalid token");
     }
     
@@ -136,20 +136,20 @@ class AuthMiddlewareTest {
      */
     @Test
     void testProtectedEndpointWithNoToken() throws IOException {
-        // Start the server
+        // Starte den Server
         startServer();
         
-        // Create a request to a protected endpoint
+        // Erstelle eine Anfrage an einen geschützten Endpunkt
         URL url = new URL("http://localhost:" + TEST_PORT + "/api/folders");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         
-        // Don't add any token
+        // Füge kein Token hinzu
         
-        // Send the request
+        // Sende die Anfrage
         int responseCode = connection.getResponseCode();
         
-        // We expect a 401 Unauthorized response
+        // Wir erwarten eine 401 Unauthorized-Antwort
         assertEquals(401, responseCode, "Should get 401 Unauthorized with no token");
     }
     
@@ -165,7 +165,7 @@ class AuthMiddlewareTest {
             }
         });
         
-        // Give the server time to start
+        // Gib dem Server Zeit zum Starten
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {

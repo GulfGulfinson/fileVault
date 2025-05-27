@@ -1,38 +1,40 @@
 package com.filevault.storage;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
- * Unit tests for DatabaseManager.
+ * Unit tests für DatabaseManager.
  */
 public class DatabaseManagerTest {
 
     @BeforeEach
     void setUp() {
-        // Initialize the test database before each test
+        // Initialisiert die Testdatenbank vor jedem Test
         DatabaseManager.initDatabase(true);
     }
 
     @AfterEach
     void tearDown() {
-        // Clean up the test database after each test
+        // Bereinigt die Testdatenbank nach jedem Test
         DatabaseManager.deleteTestDatabase();
     }
 
     @Test
     void testInitDatabaseCreatesTables() {
         try (Connection connection = DatabaseManager.getConnection()) {
-            // Check if the tables exist by querying their metadata
+            // Überprüft, ob die Tabellen existieren, indem ihre Metadaten abgefragt werden
             assertTrue(connection.getMetaData().getTables(null, null, "users", null).next());
             assertTrue(connection.getMetaData().getTables(null, null, "folders", null).next());
             assertTrue(connection.getMetaData().getTables(null, null, "files", null).next());

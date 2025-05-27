@@ -146,7 +146,7 @@ public class FileVaultApp extends Application {
         }
         
         if (loginScene != null) {
-            // Fade out login scene first
+            // Animation zum Ausblenden der Login-Szene
             FadeTransition fadeOut = new FadeTransition(Duration.millis(200), loginScene.getRoot());
             fadeOut.setFromValue(1);
             fadeOut.setToValue(0);
@@ -177,19 +177,19 @@ public class FileVaultApp extends Application {
         Object controller = fxmlLoader.getController();
         mainRoot.setUserData(controller);
         
-        // Apply current theme
+        // Aktuellen Theme anwenden
         if (isDarkMode) {
             mainRoot.getStyleClass().add("dark-theme");
         }
         
-        // Make it initially transparent for animation
+        // Initial transparent für Animation
         mainRoot.setOpacity(0);
         
-        // Create new scene or update existing one
+        // Neue Szene erstellen oder vorhandene aktualisieren
         if (mainScene == null) {
             mainScene = new Scene(mainRoot);
             
-            // Add main CSS and appropriate theme CSS
+            // Füge Haupt-CSS hinzu
             mainScene.getStylesheets().add(FileVaultApp.class.getResource("style.css").toExternalForm());
             
             if (isDarkMode) {
@@ -203,10 +203,10 @@ public class FileVaultApp extends Application {
             mainScene.setRoot(mainRoot);
         }
         
-        // Switch scenes
+        // Szene wechseln
         primaryStage.setScene(mainScene);
         
-        // Apply fade-in animation
+        // Animation zum Einfaden
         FadeTransition fadeIn = new FadeTransition(Duration.millis(200), mainRoot);
         fadeIn.setFromValue(0);
         fadeIn.setToValue(1);
@@ -230,7 +230,7 @@ public class FileVaultApp extends Application {
         if (currentScene != null) {
             Parent root = currentScene.getRoot();
             
-            // Create transition effect for theme change
+            // Erstelle Übergangseffekt für Theme-Änderung
             FadeTransition fadeOut = new FadeTransition(Duration.millis(100), root);
             fadeOut.setFromValue(1.0);
             fadeOut.setToValue(0.9);
@@ -240,13 +240,13 @@ public class FileVaultApp extends Application {
             fadeIn.setToValue(1.0);
             
             fadeOut.setOnFinished(event -> {
-                // Update stylesheets
+                // Aktualisiere Styling
                 if (darkMode) {
                     if (!root.getStyleClass().contains("dark-theme")) {
                         root.getStyleClass().add("dark-theme");
                     }
                     
-                    // Remove light theme and add dark theme
+                    // Entferne Licht-Theme und füge Dunkel-Theme hinzu
                     currentScene.getStylesheets().removeIf(css -> css.contains("light-theme.css"));
                     String darkThemeCssPath = FileVaultApp.class.getResource("css/dark-theme.css").toExternalForm();
                     if (!currentScene.getStylesheets().contains(darkThemeCssPath)) {
@@ -255,7 +255,7 @@ public class FileVaultApp extends Application {
                 } else {
                     root.getStyleClass().remove("dark-theme");
                     
-                    // Remove dark theme and add light theme
+                    // Entferne Dunkel-Theme und füge Licht-Theme hinzu
                     currentScene.getStylesheets().removeIf(css -> css.contains("dark-theme.css"));
                     String lightThemeCssPath = FileVaultApp.class.getResource("css/light-theme.css").toExternalForm();
                     if (!currentScene.getStylesheets().contains(lightThemeCssPath)) {
@@ -301,7 +301,7 @@ public class FileVaultApp extends Application {
     public static void main(String[] args) {
         int apiPort = 9090; // Standardport für API
         
-        // Check for API port parameter
+        // Überprüfe API-Port-Parameter
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("--api-port") && i + 1 < args.length) {
                 try {
@@ -313,13 +313,13 @@ public class FileVaultApp extends Application {
             }
         }
         
-        // Initialize database
+        // Initialisiere Datenbank
         DatabaseManager.initDatabase();
         
-        // Start API server
+        // Starte API-Server
         startApiServer(apiPort);
         
-        // Launch the JavaFX application
+        // Starte die JavaFX-Anwendung
         launch(args);
     }
     
@@ -334,7 +334,7 @@ public class FileVaultApp extends Application {
             apiServer = new ApiServer();
             apiServer.start(port);
             
-            // Register shutdown hook
+            // Registriere Shutdown-Hook
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 if (apiServer != null) {
                     LoggingUtil.logInfo("FileVaultApp", "Stopping API server");
@@ -380,13 +380,13 @@ public class FileVaultApp extends Application {
     public void stop() {
         LoggingUtil.logInfo("FileVaultApp", "Application stopping");
         
-        // Stop API server when application closes
+        // Stoppe API-Server beim Beenden der Anwendung
         if (apiServer != null) {
             LoggingUtil.logInfo("FileVaultApp", "Stopping API server");
             apiServer.stop();
         }
         
-        // Cleanup für alle Controller
+        // Bereinigung für alle Controller
         try {
             if (mainScene != null && mainScene.getRoot() != null) {
                 Object controller = mainScene.getRoot().getUserData();

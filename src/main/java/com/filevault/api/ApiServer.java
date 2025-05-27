@@ -314,13 +314,13 @@ public class ApiServer {
                 String requestBody = new String(exchange.getRequestBody().readAllBytes());
                 LoggingUtil.logInfo("ApiServer", "Empfangene Anfrage zum Erstellen eines Ordners: " + requestBody);
 
-                // Parse JSON to extract folder details
+                // Extrahiere den Ordner-Namen und die übergeordnete Ordner-ID aus der Anfrage
                 String folderName = JsonUtils.parseJson(requestBody, "name");
                 int parentFolderId = requestBody.contains("parentFolderId")
                         ? Integer.parseInt(JsonUtils.parseJson(requestBody, "parentFolderId"))
                         : 0; // Default to root folder
 
-                // Validate parentFolderId
+                // Überprüfe die übergeordnete Ordner-ID
                 try (Connection conn = DatabaseManager.getConnection();
                      PreparedStatement validateStmt = conn.prepareStatement("SELECT COUNT(*) FROM folders WHERE id = ?")) {
 
@@ -332,7 +332,7 @@ public class ApiServer {
                     }
                 }
 
-                // Proceed with folder creation
+                // Führe das Erstellen des Ordners aus
                 try (Connection conn = DatabaseManager.getConnection();
                      PreparedStatement stmt = conn.prepareStatement(
                              "INSERT INTO folders (name, parent_id) VALUES (?, ?)",
@@ -366,7 +366,7 @@ public class ApiServer {
                 String requestBody = new String(exchange.getRequestBody().readAllBytes());
                 LoggingUtil.logInfo("ApiServer", "Empfangene Anfrage zum Aktualisieren eines Ordners: " + requestBody);
 
-                // Parse JSON to extract folder details
+                // Extrahiere die Ordner-ID und den neuen Namen aus der Anfrage 
                 int folderId = Integer.parseInt(JsonUtils.parseJson(requestBody, "id"));
                 String folderName = JsonUtils.parseJson(requestBody, "name");
 

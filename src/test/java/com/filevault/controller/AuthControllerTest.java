@@ -79,13 +79,13 @@ public class AuthControllerTest {
      */
     @Test
     public void testToggleFormSwitchesToRegistrationView() throws Exception {
-        // Arrange
+        // Arrangieren
         setFieldValue("isLoginView", true);
         
-        // Act
+        // Aktion
         authController.toggleForm();
         
-        // Assert
+        // Überprüfen
         boolean finalIsLoginView = (boolean) getFieldValue("isLoginView");
         assertFalse(finalIsLoginView);
         assertFalse(authController.isLoginFormVisible());
@@ -101,13 +101,13 @@ public class AuthControllerTest {
      */
     @Test
     public void testToggleFormSwitchesToLoginView() throws Exception {
-        // Arrange
+        // Arrangieren
         setFieldValue("isLoginView", false);
         
-        // Act
+        // Aktion
         authController.toggleForm();
         
-        // Assert
+        // Überprüfen
         boolean isLoginView = (boolean) getFieldValue("isLoginView");
         assertTrue(isLoginView);
         assertTrue(authController.isLoginFormVisible());
@@ -123,11 +123,11 @@ public class AuthControllerTest {
      */
     @Test
     public void testShowErrorMessage() throws Exception {
-        // Act
+        // Aktion
         invokePrivateMethod("showMessage", new Class<?>[] {String.class, boolean.class}, 
                            new Object[] {"Testfehler", true});
         
-        // Assert
+        // Überprüfen
         assertEquals("Testfehler", authController.getMessageLabelText());
         assertTrue(authController.isMessageLabelVisible());
         assertTrue(authController.hasErrorStyle());
@@ -141,11 +141,11 @@ public class AuthControllerTest {
      */
     @Test
     public void testShowSuccessMessage() throws Exception {
-        // Act
+        // Aktion
         invokePrivateMethod("showMessage", new Class<?>[] {String.class, boolean.class}, 
                            new Object[] {"Erfolgsmeldung", false});
         
-        // Assert
+        // Überprüfen
         assertEquals("Erfolgsmeldung", authController.getMessageLabelText());
         assertTrue(authController.isMessageLabelVisible());
         assertTrue(authController.hasSuccessStyle());
@@ -157,14 +157,14 @@ public class AuthControllerTest {
      */
     @Test
     public void testHandleRegisterWithEmptyPasswords() throws Exception {
-        // Arrange
+        // Arrangieren
         authController.setNewPassword("");
         authController.setConfirmPassword("");
         
-        // Act
+        // Aktion
         authController.handleRegister();
         
-        // Assert
+        // Überprüfen
         assertEquals("Bitte geben Sie Ihr Passwort ein und bestätigen Sie es", authController.getMessageLabelText());
         assertTrue(authController.isMessageLabelVisible());
         assertTrue(authController.hasErrorStyle());
@@ -175,14 +175,14 @@ public class AuthControllerTest {
      */
     @Test
     public void testHandleRegisterWithNonMatchingPasswords() {
-        // Arrange
+        // Arrangieren
         authController.setNewPassword("password123");
         authController.setConfirmPassword("differentPassword");
         
-        // Act
+        // Aktion
         authController.handleRegister();
         
-        // Assert
+        // Überprüfen
         assertEquals("Die Passwörter stimmen nicht überein", authController.getMessageLabelText());
         assertTrue(authController.isMessageLabelVisible());
         assertTrue(authController.hasErrorStyle());
@@ -193,14 +193,14 @@ public class AuthControllerTest {
      */
     @Test
     public void testHandleRegisterWithTooShortPassword() {
-        // Arrange
+        // Arrangieren
         authController.setNewPassword("short");
         authController.setConfirmPassword("short");
         
-        // Act
+        // Aktion
         authController.handleRegister();
         
-        // Assert
+        // Überprüfen
         assertEquals("Das Passwort muss mindestens 8 Zeichen lang sein", authController.getMessageLabelText());
         assertTrue(authController.isMessageLabelVisible());
         assertTrue(authController.hasErrorStyle());
@@ -211,13 +211,13 @@ public class AuthControllerTest {
      */
     @Test
     public void testHandleLoginWithEmptyPassword() {
-        // Arrange
+        // Arrangieren
         authController.setPassword("");
         
-        // Act
+        // Aktion
         authController.handleLogin();
         
-        // Assert
+        // Überprüfen
         assertEquals("Bitte geben Sie Ihr Passwort ein", authController.getMessageLabelText());
         assertTrue(authController.isMessageLabelVisible());
         assertTrue(authController.hasErrorStyle());
@@ -245,7 +245,7 @@ public class AuthControllerTest {
             try {
                 isLoginView = (boolean) getFieldValue("isLoginView");
             } catch (Exception e) {
-                // Ignore reflection exception in test
+                // Ignoriere Reflection-Ausnahme in Test
             }
             
             isLoginView = !isLoginView;
@@ -253,7 +253,7 @@ public class AuthControllerTest {
             try {
                 setFieldValue("isLoginView", isLoginView);
             } catch (Exception e) {
-                // Ignore reflection exception in test
+                // Ignoriere Reflection-Ausnahme in Test
             }
             
             updateUI();
@@ -301,7 +301,7 @@ public class AuthControllerTest {
             try {
                 isLoginView = (boolean) getFieldValue("isLoginView");
             } catch (Exception e) {
-                // Ignore reflection exception in test
+                // Ignoriere Reflection-Ausnahme in Test
             }
             
             loginFormVisible = isLoginView;

@@ -16,16 +16,16 @@ import javafx.scene.layout.Region;
 import javafx.util.Duration;
 
 /**
- * Utility class for creating and applying animations in the application.
+ * Utility-Klasse zum Erstellen und Anwenden von Animationen in der Anwendung.
  */
 public class AnimationUtil {
     
     /**
-     * Creates a fade-in animation for a node.
+     * Erstellt eine Fade-In-Animation für ein Node.
      * 
-     * @param node The node to animate
-     * @param duration Duration in milliseconds
-     * @return The configured transition
+     * @param node Das zu animierende Node
+     * @param duration Dauer in Millisekunden
+     * @return Die konfigurierte Transition
      */
     public static FadeTransition createFadeInTransition(Node node, double duration) {
         FadeTransition fadeIn = new FadeTransition(Duration.millis(duration), node);
@@ -36,11 +36,11 @@ public class AnimationUtil {
     }
     
     /**
-     * Creates a fade-out animation for a node.
+     * Erstellt eine Fade-Out-Animation für ein Node.
      * 
-     * @param node The node to animate
-     * @param duration Duration in milliseconds
-     * @return The configured transition
+     * @param node Das zu animierende Node
+     * @param duration Dauer in Millisekunden
+     * @return Die konfigurierte Transition
      */
     public static FadeTransition createFadeOutTransition(Node node, double duration) {
         FadeTransition fadeOut = new FadeTransition(Duration.millis(duration), node);
@@ -51,11 +51,11 @@ public class AnimationUtil {
     }
     
     /**
-     * Creates a scale-in animation for a node.
+     * Erstellt eine Scale-In-Animation für ein Node.
      * 
-     * @param node The node to animate
-     * @param duration Duration in milliseconds
-     * @return The configured transition
+     * @param node Das zu animierende Node
+     * @param duration Dauer in Millisekunden
+     * @return Die konfigurierte Transition
      */
     public static ScaleTransition createScaleInTransition(Node node, double duration) {
         ScaleTransition scaleIn = new ScaleTransition(Duration.millis(duration), node);
@@ -68,11 +68,11 @@ public class AnimationUtil {
     }
     
     /**
-     * Creates a slide-up animation for a node.
+     * Erstellt eine Slide-Up-Animation für ein Node.
      * 
-     * @param node The node to animate
-     * @param duration Duration in milliseconds
-     * @return The configured transition
+     * @param node Das zu animierende Node
+     * @param duration Dauer in Millisekunden
+     * @return Die konfigurierte Transition
      */
     public static TranslateTransition createSlideUpTransition(Node node, double duration) {
         TranslateTransition slideUp = new TranslateTransition(Duration.millis(duration), node);
@@ -83,12 +83,12 @@ public class AnimationUtil {
     }
     
     /**
-     * Creates a rotation animation for a node.
+     * Erstellt eine Rotationsanimation für ein Node.
      * 
-     * @param node The node to animate
-     * @param duration Duration in milliseconds
-     * @param cycles Number of cycles (-1 for infinite)
-     * @return The configured transition
+     * @param node Das zu animierende Node
+     * @param duration Dauer in Millisekunden
+     * @param cycles Anzahl der Zyklen (-1 für unendlich)
+     * @return Die konfigurierte Transition
      */
     public static RotateTransition createRotateTransition(Node node, double duration, int cycles) {
         RotateTransition rotate = new RotateTransition(Duration.millis(duration), node);
@@ -100,10 +100,10 @@ public class AnimationUtil {
     }
     
     /**
-     * Applies a combined fade-in and scale-in animation to a node.
+     * Wendet eine kombinierte Fade-In- und Scale-In-Animation auf ein Node an.
      * 
-     * @param node The node to animate
-     * @param duration Duration in milliseconds
+     * @param node Das zu animierende Node
+     * @param duration Dauer in Millisekunden
      */
     public static void applyFadeInWithScale(Node node, double duration) {
         node.setOpacity(0);
@@ -116,10 +116,10 @@ public class AnimationUtil {
     }
     
     /**
-     * Applies a combined fade-in and slide-up animation to a node.
+     * Wendet eine kombinierte Fade-In- und Slide-Up-Animation auf ein Node an.
      * 
-     * @param node The node to animate
-     * @param duration Duration in milliseconds
+     * @param node Das zu animierende Node
+     * @param duration Dauer in Millisekunden
      */
     public static void applyFadeInWithSlideUp(Node node, double duration) {
         node.setOpacity(0);
@@ -132,11 +132,11 @@ public class AnimationUtil {
     }
     
     /**
-     * Creates a pulse animation for a node.
+     * Erstellt eine Puls-Animation für ein Node.
      * 
-     * @param node The node to animate
-     * @param duration Duration in milliseconds
-     * @return The configured transition
+     * @param node Das zu animierende Node
+     * @param duration Dauer in Millisekunden
+     * @return Die konfigurierte Transition
      */
     public static ScaleTransition createPulseTransition(Node node, double duration) {
         ScaleTransition pulse = new ScaleTransition(Duration.millis(duration), node);
@@ -151,12 +151,12 @@ public class AnimationUtil {
     }
     
     /**
-     * Creates a transition between two views, fading one out and another in.
+     * Erstellt eine Transition zwischen zwei Ansichten, wobei eine ausgeblendet und die andere eingeblendet wird.
      * 
-     * @param currentView The current view to fade out
-     * @param newView The new view to fade in
-     * @param duration Duration in milliseconds
-     * @return The configured sequential transition
+     * @param currentView Die aktuelle Ansicht, die ausgeblendet wird
+     * @param newView Die neue Ansicht, die eingeblendet wird
+     * @param duration Dauer in Millisekunden
+     * @return Die konfigurierte sequentielle Transition
      */
     public static SequentialTransition createViewTransition(Node currentView, Node newView, double duration) {
         newView.setOpacity(0);
@@ -170,11 +170,11 @@ public class AnimationUtil {
     }
     
     /**
-     * Creates a glow effect animation for a node.
+     * Erstellt eine Glow-Effekt-Animation für ein Node.
      * 
-     * @param node The node to animate
-     * @param duration Duration in milliseconds
-     * @param cycles Number of cycles
+     * @param node Das zu animierende Node
+     * @param duration Dauer in Millisekunden
+     * @param cycles Anzahl der Zyklen
      */
     public static void applyGlowPulse(Node node, double duration, int cycles) {
         if (!(node instanceof Region)) {
@@ -202,10 +202,10 @@ public class AnimationUtil {
     }
     
     /**
-     * Creates a loading spinner animation.
+     * Erstellt eine Lade-Spinner-Animation.
      * 
-     * @param node The node to animate as a spinner
-     * @return The configured rotation transition
+     * @param node Das zu animierende Node als Spinner
+     * @return Die konfigurierte Rotations-Transition
      */
     public static RotateTransition createLoadingSpinner(Node node) {
         RotateTransition rotate = createRotateTransition(node, 1500, -1);
@@ -214,9 +214,9 @@ public class AnimationUtil {
     }
     
     /**
-     * Stops a loading spinner animation.
+     * Stoppt eine Lade-Spinner-Animation.
      * 
-     * @param rotateTransition The rotation transition to stop
+     * @param rotateTransition Die zu stoppende Rotations-Transition
      */
     public static void stopLoadingSpinner(RotateTransition rotateTransition) {
         if (rotateTransition != null) {

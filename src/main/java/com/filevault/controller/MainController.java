@@ -109,10 +109,10 @@ public class MainController {
     @FXML
     public void initialize() {
         LoggingUtil.logInfo("MainController", "MainController initialized.");
-        // Initialize folder tree
+        // Ordnerbaum initialisieren
         refreshFolderTree();
         
-        // Set up custom cell factory for folder tree
+        // Richte die benutzerdefinierte Cell Factory für den Ordnerbaum ein
         folderTreeView.setCellFactory(tv -> new TreeCell<VirtualFolder>() {
             @Override
             protected void updateItem(VirtualFolder folder, boolean empty) {
@@ -132,10 +132,10 @@ public class MainController {
             }
         });
 
-        // Initialize button effects
+        // Initialisiere Button-Effekte
         setupButtonEffects();
         
-        // Set up file table columns
+        // Richte die Spalten der Dateitabelle ein
         fileNameColumn.setCellValueFactory(data -> {
             if (data.getValue() instanceof VirtualFolder virtualFolder) {
                 return new SimpleStringProperty(virtualFolder.getName());
@@ -166,7 +166,7 @@ public class MainController {
             }
         });
 
-        // Add tooltips for folders in the file table and handle right-click options for folders
+        // Füge Tooltips für Ordner in der Dateitabelle hinzu und behandle Rechtsklick-Optionen für Ordner
         fileTableView.setRowFactory(tv -> {
             TableRow<Object> row = new TableRow<>();
             ContextMenu contextMenu = new ContextMenu();
@@ -188,14 +188,14 @@ public class MainController {
 
             contextMenu.getItems().addAll(renameItem, deleteItem);
 
-            // Show context menu only for non-empty rows
+            // Zeige das Kontextmenü nur für nicht-leere Zeilen an
             row.contextMenuProperty().bind(
                 Bindings.when(row.emptyProperty())
                         .then((ContextMenu) null)
                         .otherwise(contextMenu)
             );
 
-            // Add tooltips for folders
+            // Füge Tooltips für Ordner hinzu
             row.itemProperty().addListener((obs, oldItem, newItem) -> {
                 if (newItem instanceof VirtualFolder folder) {
                     row.setTooltip(new Tooltip(folder.getDescription()));
@@ -205,7 +205,7 @@ public class MainController {
             return row;
         });
 
-        // Register the refresh handler for the file table
+        // Registriere den Refresh-Handler für die Dateitabelle
         fileTableView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
                 handleFileSelection(event);
@@ -309,26 +309,26 @@ public class MainController {
     }
 
     /**
-     * Initialize button animation effects.
+     * Initialisiert die Button-Animationseffekte.
      */
     private void setupButtonEffects() {
         LoggingUtil.logInfo("MainController", "Setting up button effects.");
         
-        // Find all buttons in the scene and add hover effects
+        // Finde alle Buttons in der Szene und füge Hover-Effekte hinzu
         Platform.runLater(() -> {
             if (fileTableView == null || fileTableView.getScene() == null) {
-                LoggingUtil.logError("MainController", "Scene not yet available for button effects");
+                LoggingUtil.logError("MainController", "Szene nicht verfügbar für Button-Effekte");
                 return;
             }
             
             fileTableView.getScene().getRoot().lookupAll(".button").forEach(node -> {
                 if (node instanceof Button button) {
-                    // Skip the refreshButton as it already has animations
+                    // Überspringe die refreshButton, da sie bereits Animationen hat
                     if (button == refreshButton || button == themeToggleButton) {
                         return;
                     }
                     
-                    // Create subtle scale transition for hover
+                    // Erstelle eine subtile Skalierungsanimation für den Hover-Effekt
                     javafx.animation.ScaleTransition scaleIn = new javafx.animation.ScaleTransition(
                             Duration.millis(200), button);
                     scaleIn.setToX(1.05);
@@ -341,10 +341,10 @@ public class MainController {
                     scaleOut.setToY(1.0);
                     scaleOut.setInterpolator(Interpolator.EASE_IN);
                     
-                    // Apply slight brightness effect on hover for better icon visibility
+                    // Wendet eine leichte Helligkeitsanimation beim Hover auf den Button an, um die Icon-Sichtbarkeit zu verbessern
                     button.setOnMouseEntered(e -> {
                         scaleIn.playFromStart();
-                        // Find icon label inside button
+                        // Finde das Icon-Label innerhalb des Buttons
                         button.lookupAll(".icon").forEach(iconNode -> {
                             if (iconNode instanceof Label iconLabel) {
                                 FadeTransition fadeIn = new FadeTransition(Duration.millis(200), iconLabel);
@@ -357,7 +357,7 @@ public class MainController {
                     
                     button.setOnMouseExited(e -> {
                         scaleOut.playFromStart();
-                        // Reset icon label
+                        // Setze das Icon-Label zurück
                         button.lookupAll(".icon").forEach(iconNode -> {
                             if (iconNode instanceof Label iconLabel) {
                                 FadeTransition fadeOut = new FadeTransition(Duration.millis(150), iconLabel);
@@ -378,30 +378,30 @@ public class MainController {
     private void initializeThemeToggle() {
         LoggingUtil.logInfo("MainController", "Initializing theme toggle button");
         
-        // Set initial button text based on current theme
+        // Setze den initialen Button-Text basierend auf dem aktuellen Theme
         updateThemeToggleText(FileVaultApp.isDarkMode());
         
-        // Add click event handler
+        // Füge einen Klick-Event-Handler hinzu
         themeToggleButton.setOnAction(event -> {
             boolean newDarkMode = !FileVaultApp.isDarkMode();
             
-            // Apply rotation animation to the button
+            // Wende eine Rotationsanimation auf den Button an
             RotateTransition rotateTransition = new RotateTransition(Duration.millis(500), themeToggleButton);
             rotateTransition.setByAngle(newDarkMode ? 360 : -360);
             rotateTransition.setCycleCount(1);
             rotateTransition.setInterpolator(Interpolator.EASE_BOTH);
             
-            // Toggle theme and update button text
+            // Theme umschalten und Button-Text aktualisieren
             rotateTransition.setOnFinished(e -> updateThemeToggleText(newDarkMode));
             rotateTransition.play();
             
-            // Toggle theme in app
+            // Theme in der App umschalten
             FileVaultApp.toggleTheme(newDarkMode);
         });
     }
     
     /**
-     * Updates the theme toggle button text with appropriate emoji
+     * Aktualisiert den Text des Theme-Toggle-Buttons mit den entsprechenden Emojis
      */
     private void updateThemeToggleText(boolean isDarkMode) {
         themeToggleButton.setText(isDarkMode ? "☀️" : "🌕");
@@ -413,13 +413,13 @@ public class MainController {
      */
     private void refreshFolderTree() {
         LoggingUtil.logInfo("MainController", "Refreshing folder tree.");
-        // Create a single root folder
+        // Erstelle einen einzelnen Root-Ordner
         VirtualFolder rootFolder = new VirtualFolder(-1, "Root", "Root folder", null);
         TreeItem<VirtualFolder> rootItem = new TreeItem<>(rootFolder);
         folderTreeView.setRoot(rootItem);
         folderTreeView.setShowRoot(true);
 
-        // Populate the root folder with other folders
+        // Fülle den Root-Ordner mit weiteren Ordnern
         List<VirtualFolder> folders = FolderManager.getInstance().getFolders();
         for (VirtualFolder folder : folders) {
             if (folder.getParentId() == null) {
@@ -428,7 +428,7 @@ public class MainController {
             }
         }
 
-        // Allow root folder to be selectable
+        // Erlaube die Auswahl des Root-Ordners
         folderTreeView.getSelectionModel().select(rootItem);
         LoggingUtil.logInfo("MainController", "Folder tree refreshed.");
     }
@@ -443,7 +443,7 @@ public class MainController {
     private TreeItem<VirtualFolder> createTreeItem(VirtualFolder folder, List<VirtualFolder> allFolders) {
         TreeItem<VirtualFolder> item = new TreeItem<>(folder);
         
-        // Add all children
+        // Füge alle Unterordner hinzu
         for (VirtualFolder child : folder.getChildren()) {
             TreeItem<VirtualFolder> childItem = createTreeItem(child, allFolders);
             item.getChildren().add(childItem);
@@ -464,12 +464,12 @@ public class MainController {
             VirtualFolder selectedFolder = selectedItem.getValue();
             LoggingUtil.logInfo("MainController", "Folder selected: " + selectedFolder.getName());
             
-            // Check if this is the root folder
+            // Prüfe, ob dies der Root-Ordner ist
             if (selectedFolder.getId() == -1) {
-                // For root folder, show the top-level folders and their files
+                // Für den Root-Ordner zeige die obersten Ordner und deren Dateien an
                 currentFolderLabel.setText(selectedFolder.getName());
                 
-                // Get only top-level folders
+                // Hole nur die obersten Ordner
                 List<VirtualFolder> topFolders = new ArrayList<>();
                 for (VirtualFolder folder : FolderManager.getInstance().getFolders()) {
                     if (folder.getParentId() == null) {
@@ -480,7 +480,7 @@ public class MainController {
                 fileTableView.setItems(FXCollections.observableArrayList(topFolders));
                 LoggingUtil.logInfo("MainController", "Root folder selected, showing top-level folders");
             } else {
-                // Normal folder selection
+                // Normale Ordnerauswahl
                 FolderManager.getInstance().setCurrentFolder(selectedFolder);
                 refreshFileList();
             }
@@ -510,7 +510,7 @@ public class MainController {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Datei importieren");
         
-        // Get current window from any control in the scene
+        // Hole das aktuelle Fenster von einem beliebigen Steuerelement in der Szene
         Window currentWindow = folderTreeView.getScene().getWindow();
         File file = fileChooser.showOpenDialog(currentWindow);
         
@@ -528,7 +528,7 @@ public class MainController {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Ordner importieren");
         
-        // Get current window from any control in the scene
+        // Hole das aktuelle Fenster von einem beliebigen Steuerelement in der Szene
         Window currentWindow = folderTreeView.getScene().getWindow();
         File directory = directoryChooser.showDialog(currentWindow);
         
@@ -552,7 +552,7 @@ public class MainController {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Exportieren nach");
         
-        // Get current window from any control in the scene
+        // Hole das aktuelle Fenster von einem beliebigen Steuerelement in der Szene
         Window currentWindow = folderTreeView.getScene().getWindow();
         File directory = directoryChooser.showDialog(currentWindow);
         
@@ -743,7 +743,7 @@ public class MainController {
     }
 
     /**
-     * Refreshes both the folder tree and file table while preserving the folder tree's state.
+     * Aktualisiert beide Ordnerbaum und Dateiliste, während der Ordnerbaumstatus beibehalten wird.
      */
     private void refreshUI() {
         LoggingUtil.logInfo("MainController", "Performing full UI refresh");
@@ -783,7 +783,7 @@ public class MainController {
     }
 
     /**
-     * Refreshes both the folder tree and file table while preserving the folder tree's state.
+     * Aktualisiert beide Ordnerbaum und Dateiliste, während der Ordnerbaumstatus beibehalten wird.
      */
     private void refreshUIAfterRename(VirtualFolder folder) {
         TreeItem<VirtualFolder> selectedFolder = folderTreeView.getSelectionModel().getSelectedItem();
@@ -802,21 +802,21 @@ public class MainController {
      */
     @FXML
     public void handleNewFolder() {
-        // Get the selected folder (parent)
+        // Hole den ausgewählten Ordner (Eltern)
         TreeItem<VirtualFolder> selectedItem = folderTreeView.getSelectionModel().getSelectedItem();
         final Integer parentId = (selectedItem != null && selectedItem.getValue() != null) ? 
             selectedItem.getValue().getId() : null;
 
-        // Create a custom dialog
+        // Erstelle einen benutzerdefinierten Dialog
         Dialog<Pair<String, String>> dialog = new Dialog<>();
         dialog.setTitle("Neuer Ordner");
         dialog.setHeaderText("Geben Sie die Details für den neuen Ordner ein");
 
-        // Set the button types
+        // Setze die Button-Typen
         ButtonType createButtonType = new ButtonType("Erstellen", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(createButtonType, ButtonType.CANCEL);
 
-        // Create the name and description fields
+        // Erstelle die Felder für Name und Beschreibung
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
@@ -835,10 +835,10 @@ public class MainController {
 
         dialog.getDialogPane().setContent(grid);
 
-        // Request focus on the name field by default
+        // Setze den Fokus standardmäßig auf das Namensfeld
         Platform.runLater(nameField::requestFocus);
 
-        // Convert the result to a name-description pair when the create button is clicked
+        // Konvertiere das Ergebnis in ein Name-Beschreibung-Paar, wenn der Erstellen-Button geklickt wird
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == createButtonType) {
                 return new Pair<>(nameField.getText(), descriptionField.getText());
@@ -860,7 +860,7 @@ public class MainController {
                     
                     if (folder != null) {
                         refreshFolderTree();
-                        // Select the new folder
+                        // Wähle den neuen Ordner aus
                         selectFolderInTree(folder);
                         handleFolderSelection(null);
                         statusLabel.setText("Ordner erfolgreich erstellt.");
@@ -996,11 +996,11 @@ public class MainController {
             dialog.setTitle("Change Master Password");
             dialog.setHeaderText("Enter your current password and a new password");
             
-            // Set the button types
+            // Setze die Button-Typen
             ButtonType changeButtonType = new ButtonType("Change", ButtonBar.ButtonData.OK_DONE);
             dialog.getDialogPane().getButtonTypes().addAll(changeButtonType, ButtonType.CANCEL);
             
-            // Create the password fields
+            // Erstelle die Passwortfelder
             PasswordField currentPasswordField = new PasswordField();
             currentPasswordField.setPromptText("Current password");
             PasswordField newPasswordField = new PasswordField();
@@ -1008,7 +1008,7 @@ public class MainController {
             PasswordField confirmPasswordField = new PasswordField();
             confirmPasswordField.setPromptText("Confirm new password");
             
-            // Enable/Disable change button depending on whether passwords are entered
+            // Aktiviere/Deaktiviere den Ändern-Button je nachdem, ob Passwörter eingegeben wurden
             Button changeButton = (Button) dialog.getDialogPane().lookupButton(changeButtonType);
             changeButton.setDisable(true);
             
@@ -1033,7 +1033,7 @@ public class MainController {
                         newValue.trim().isEmpty());
             });
             
-            // Create and add the layout
+            // Erstelle und füge das Layout hinzu
             javafx.scene.layout.GridPane grid = new javafx.scene.layout.GridPane();
             grid.setHgap(10);
             grid.setVgap(10);
@@ -1048,7 +1048,7 @@ public class MainController {
             
             Platform.runLater(currentPasswordField::requestFocus);
             
-            // Convert the result to a password when the change button is clicked
+            // Konvertiere das Ergebnis in ein Passwort, wenn der Ändern-Button geklickt wird
             dialog.setResultConverter(dialogButton -> {
                 if (dialogButton == changeButtonType) {
                     return new String[]{
@@ -1175,49 +1175,49 @@ public class MainController {
     }
 
     /**
-     * Setter for folderTreeView (for testing purposes).
+     * Setter für folderTreeView (für Testzwecke).
      */
     public void setFolderTreeView(TreeView<VirtualFolder> folderTreeView) {
         this.folderTreeView = folderTreeView;
     }
 
     /**
-     * Setter for fileTableView (for testing purposes).
+     * Setter für fileTableView (für Testzwecke).
      */
     public void setFileTableView(TableView<Object> fileTableView) {
         this.fileTableView = fileTableView;
     }
 
     /**
-     * Setter for currentFolderLabel (for testing purposes).
+     * Setter für currentFolderLabel (für Testzwecke).
      */
     public void setCurrentFolderLabel(Label currentFolderLabel) {
         this.currentFolderLabel = currentFolderLabel;
     }
 
     /**
-     * Setter for statusLabel (for testing purposes).
+     * Setter für statusLabel (für Testzwecke).
      */
     public void setStatusLabel(Label statusLabel) {
         this.statusLabel = statusLabel;
     }
 
     /**
-     * Setter for fileNameColumn (for testing purposes).
+     * Setter für fileNameColumn (für Testzwecke).
      */
     public void setFileNameColumn(TableColumn<Object, String> fileNameColumn) {
         this.fileNameColumn = fileNameColumn;
     }
 
     /**
-     * Setter for fileSizeColumn (for testing purposes).
+     * Setter für fileSizeColumn (für Testzwecke).
      */
     public void setFileSizeColumn(TableColumn<Object, String> fileSizeColumn) {
         this.fileSizeColumn = fileSizeColumn;
     }
 
     /**
-     * Setter for fileDateColumn (for testing purposes).
+    * Setter für fileDateColumn (für Testzwecke).
      */
     public void setFileDateColumn(TableColumn<Object, String> fileDateColumn) {
         this.fileDateColumn = fileDateColumn;
@@ -1239,7 +1239,7 @@ public class MainController {
         if (refreshButton != null) {
             refreshButton.getStyleClass().add("refresh-button");
             
-            // Set button text with refresh symbol
+            // Setze den Button-Text mit dem Refresh-Symbol
             refreshButton.setText("↻ Aktualisieren");
             refreshButton.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
             refreshButton.setTooltip(new Tooltip("Ansicht aktualisieren"));
@@ -1259,14 +1259,14 @@ public class MainController {
                 // Deaktiviere den Button während der Aktualisierung
                 refreshButton.setDisable(true);
                 
-                // Create icon rotation animation
+                // Erstelle eine Rotationsanimation für das Icon
                 javafx.scene.shape.Circle circle = new javafx.scene.shape.Circle(10, javafx.scene.paint.Color.TRANSPARENT);
                 javafx.scene.text.Text rotatingIcon = new javafx.scene.text.Text("↻");
                 rotatingIcon.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
                 
                 javafx.scene.layout.StackPane iconPane = new javafx.scene.layout.StackPane(circle, rotatingIcon);
                 
-                // Temporarily replace button content with the animated icon and text
+                // Temporär ersetze den Button-Inhalt mit dem animierten Icon und Text
                 String originalText = refreshButton.getText();
                 javafx.scene.layout.HBox content = new javafx.scene.layout.HBox(5, iconPane, 
                     new javafx.scene.control.Label("Aktualisiere..."));
@@ -1274,7 +1274,7 @@ public class MainController {
                 refreshButton.setGraphic(content);
                 refreshButton.setText("");
                 
-                // Create the rotation animation
+                // Erstelle die Rotationsanimation
                 RotateTransition rotateTransition = 
                     new RotateTransition(Duration.seconds(1), rotatingIcon);
                 rotateTransition.setFromAngle(0);
@@ -1282,15 +1282,15 @@ public class MainController {
                 rotateTransition.setCycleCount(1);
                 rotateTransition.setInterpolator(javafx.animation.Interpolator.LINEAR);
                 
-                // Start the rotation animation
+                // Starte die Rotationsanimation
                 rotateTransition.play();
             }
         } catch (Exception ex) {
-            // Gracefully handle any animation setup errors in tests
+            // Behandle Fehler beim Einrichten der Animation in Tests elegant
             LoggingUtil.logError("MainController", "Error setting up refresh animation: " + ex.getMessage());
         }
         
-        // Fade out the current views
+        // Fade-Out der aktuellen Ansichten
         FadeTransition fadeOutFolders = new FadeTransition(Duration.millis(200), folderTreeView);
         fadeOutFolders.setFromValue(1.0);
         fadeOutFolders.setToValue(0.5);
@@ -1301,16 +1301,16 @@ public class MainController {
         
         ParallelTransition fadeOut = new ParallelTransition(fadeOutFolders, fadeOutFiles);
         fadeOut.setOnFinished(event -> {
-            // Refresh UI after a short delay to make animation visible
+            // Aktualisiere die UI nach einer kurzen Verzögerung, um die Animation sichtbar zu machen
             Platform.runLater(() -> {
                 try {
-                    // Refresh the UI
+                    // Aktualisiere die UI
                     refreshUI();
                     if (statusLabel != null) {
                         statusLabel.setText("Ansicht erfolgreich aktualisiert");
                     }
                     
-                    // Fade in the refreshed views
+                    // Fade in die aktualisierte Ansichten
                     FadeTransition fadeInFolders = new FadeTransition(Duration.millis(400), folderTreeView);
                     fadeInFolders.setFromValue(0.5);
                     fadeInFolders.setToValue(1.0);
@@ -1322,7 +1322,7 @@ public class MainController {
                     ParallelTransition fadeIn = new ParallelTransition(fadeInFolders, fadeInFiles);
                     fadeIn.play();
                     
-                    // Restore original button text after animation completes
+                    // Stelle den ursprünglichen Button-Text nach Abschluss der Animation wieder her
                     if (refreshButton != null) {
                         try {
                             javafx.animation.PauseTransition pause = new javafx.animation.PauseTransition(
@@ -1355,7 +1355,7 @@ public class MainController {
                         LoggingUtil.logError("MainController", "Error showing alert: " + alertEx.getMessage());
                     }
                     
-                    // Restore original button immediately on error
+                    // Stelle den ursprünglichen Button bei einem Fehler sofort wieder her
                     if (refreshButton != null) {
                         try {
                             refreshButton.setGraphic(null);
@@ -1369,7 +1369,7 @@ public class MainController {
             });
         });
         
-        // Start fade out
+        // Starte fade out
         fadeOut.play();
     }
 
@@ -1394,7 +1394,7 @@ public class MainController {
         alert.setHeaderText("Datei löschen");
         alert.setContentText("Möchten Sie die Datei/den Ordner " + fileToDelete.getName() + " wirklich löschen?");
         
-        // Apply current theme to dialog
+        // Wende das aktuelle Theme auf den Dialog an
         DialogPane dialogPane = alert.getDialogPane();
         dialogPane.getStylesheets().add(getClass().getResource("/com/filevault/style.css").toExternalForm());
         if (FileVaultApp.isDarkMode()) {
@@ -1416,7 +1416,7 @@ public class MainController {
         dialog.setTitle("Umbenennen");
         dialog.setHeaderText("Datei/Ordner umbenennen");
         
-        // Apply current theme to dialog
+        // Wende das aktuelle Theme auf den Dialog an
         DialogPane dialogPane = dialog.getDialogPane();
         dialogPane.getStylesheets().add(getClass().getResource("/com/filevault/style.css").toExternalForm());
         if (FileVaultApp.isDarkMode()) {

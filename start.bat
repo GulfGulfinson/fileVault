@@ -19,7 +19,12 @@ for %%m in (javafx-base javafx-graphics javafx-controls javafx-fxml) do (
 set "JAVAFX_MODULES=javafx.controls,javafx.fxml,javafx.base,javafx.graphics"
 
 REM Generate classpath for other dependencies
-call mvn dependency:build-classpath -Dmdep.outputFile=cp.txt -q -DincludeScope=runtime -DexcludeGroupIds=org.openjfx
+if exist mvnw.cmd (
+    set MVN_CMD=mvnw.cmd
+) else (
+    set MVN_CMD=mvn
+)
+%MVN_CMD% dependency:build-classpath -Dmdep.outputFile=cp.txt -q -DincludeScope=runtime -DexcludeGroupIds=org.openjfx
 set /p CLASSPATH=<cp.txt
 set "CLASSPATH=%CLASSPATH%;target\FileVault-shaded.jar"
 del cp.txt

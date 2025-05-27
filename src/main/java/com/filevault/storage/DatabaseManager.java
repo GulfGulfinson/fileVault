@@ -45,10 +45,10 @@ public class DatabaseManager {
                 Files.createDirectories(parentDir);
             }
             
-            // Ensure the database file is writable
+            // Stelle sicher, dass die Datenbankdatei beschreibbar ist
             File dbFile = new File(currentDbPath);
             if (dbFile.exists() && !dbFile.canWrite()) {
-                throw new RuntimeException("Database file is read-only: " + currentDbPath);
+                throw new RuntimeException("Datenbankdatei ist schreibgeschützt: " + currentDbPath);
             }
             
             // Verbindung zur Datenbank herstellen (erstellt sie, falls sie nicht existiert)
@@ -79,7 +79,7 @@ public class DatabaseManager {
                 }
             }
             
-            // Ensure tables are created even if no recreation is needed
+            // Stelle sicher, dass die Tabellen erstellt werden
             createTables();
             LoggingUtil.logDatabase("Initialize", "Database", "Database initialized successfully.");
             

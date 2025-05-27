@@ -43,23 +43,23 @@ public class LoggingUtil {
     }
 
     /**
-     * Sets the log file path for testing purposes.
+     * Setzt den Pfad der Logdatei für Testzwecke.
      *
-     * @param path The new log file path.
+     * @param path Der neue Pfad zur Logdatei.
      */
     public static void setLogFilePath(String path) {
         logFilePath = path;
     }
 
     /**
-     * Disables logging.
+     * Deaktiviert das Logging.
      */
     public static void disableLogging() {
         loggingEnabled = false;
     }
 
     /**
-     * Enables logging.
+     * Aktiviert das Logging.
      */
     public static void enableLogging() {
         loggingEnabled = true;
@@ -101,51 +101,51 @@ public class LoggingUtil {
     }
 
     /**
-     * Logs an informational message.
+     * Protokolliert eine Informationsnachricht.
      *
-     * @param className The name of the class where the log is generated.
-     * @param message   The message to log.
+     * @param className Der Name der Klasse, in der das Log erzeugt wird.
+     * @param message   Die zu protokollierende Nachricht.
      */
     public static void logInfo(String className, String message) {
         log("INFO: [" + className + "] " + message);
     }
 
     /**
-     * Logs an error message.
+     * Protokolliert eine Fehlermeldung.
      *
-     * @param className The name of the class where the log is generated.
-     * @param message   The message to log.
+     * @param className Der Name der Klasse, in der das Log erzeugt wird.
+     * @param message   Die zu protokollierende Nachricht.
      */
     public static void logError(String className, String message) {
         log("ERROR: [" + className + "] " + message);
     }
 
     /**
-     * Logs a severe error message.
+     * Protokolliert eine schwerwiegende Fehlermeldung.
      *
-     * @param className The name of the class where the log is generated.
-     * @param message   The message to log.
+     * @param className Der Name der Klasse, in der das Log erzeugt wird.
+     * @param message   Die zu protokollierende Nachricht.
      */
     public static void logSevere(String className, String message) {
         log("SEVERE: [" + className + "] " + message);
     }
 
     /**
-     * Logs a warning message.
+     * Protokolliert eine Warnmeldung.
      *
-     * @param className The name of the class where the log is generated.
-     * @param message   The message to log.
+     * @param className Der Name der Klasse, in der das Log erzeugt wird.
+     * @param message   Die zu protokollierende Nachricht.
      */
     public static void logWarning(String className, String message) {
         log("WARNING: [" + className + "] " + message);
     }
 
     /**
-     * Logs a database-related message.
+     * Protokolliert eine datenbankbezogene Nachricht.
      *
-     * @param operation The database operation (e.g., "Get", "Put").
-     * @param target    The target of the operation (e.g., "File", "Folder").
-     * @param message   The message to log.
+     * @param operation Die Datenbankoperation (z.B. "Get", "Put").
+     * @param target    Das Ziel der Operation (z.B. "File", "Folder").
+     * @param message   Die zu protokollierende Nachricht.
      */
     public static void logDatabase(String operation, String target, String message) {
         log("DATABASE: [" + operation + " " + target + "] " + message);
@@ -161,28 +161,28 @@ public class LoggingUtil {
     }
 
     /**
-     * Returns the maximum capacity of the ring buffer.
+     * Gibt die maximale Kapazität des Ringpuffers zurück.
      *
-     * @return The ring buffer capacity.
+     * @return Die Kapazität des Ringpuffers.
      */
     public static int getRingBufferCapacity() {
         return RING_BUFFER_CAPACITY;
     }
 
     /**
-     * Configures the logging system with file and console handlers.
+     * Konfiguriert das Loggingsystem mit Datei- und Konsolenhandlern.
      */
     public static void configureLogger() {
         try {
             logger.setLevel(Level.ALL);
             
-            // Create log directory if it doesn't exist
+            // Erstelle das Log-Verzeichnis, falls es nicht existiert
             File logDir = new File("logs");
             if (!logDir.exists()) {
                 logDir.mkdir();
             }
             
-            // Create custom formatter
+            // Erstelle benutzerdefinierten Formatter
             SimpleFormatter customFormatter = new SimpleFormatter() {
                 @Override
                 public String format(java.util.logging.LogRecord record) {
@@ -192,7 +192,7 @@ public class LoggingUtil {
                 }
             };
             
-            // Remove any existing handlers
+            // Entferne alle bestehenden Handler
             if (fileHandler != null) {
                 logger.removeHandler(fileHandler);
                 fileHandler.close();
@@ -204,13 +204,13 @@ public class LoggingUtil {
                 rootLogger.removeHandler(handler);
             }
             
-            // Configure single file handler without rotation (no limit on file count)
+            // Konfiguriere einen einzelnen FileHandler ohne Rotation (keine Begrenzung der Dateianzahl)
             fileHandler = new FileHandler("logs/" + LOG_FILE, 0, 1, true);
             fileHandler.setFormatter(customFormatter);
             fileHandler.setLevel(Level.ALL);
             logger.addHandler(fileHandler);
             
-            // Configure console handler
+            // Konfiguriere ConsoleHandler
             ConsoleHandler consoleHandler = new ConsoleHandler();
             consoleHandler.setFormatter(customFormatter);
             consoleHandler.setLevel(Level.INFO);

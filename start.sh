@@ -16,7 +16,12 @@ JAVAFX_PATH=${JAVAFX_PATH:1}  # Remove the leading ':'
 JAVAFX_MODULES="javafx.controls,javafx.fxml,javafx.base,javafx.graphics"
 
 # Generate classpath for other dependencies
-mvn dependency:build-classpath -Dmdep.outputFile=cp.txt -q -DincludeScope=runtime -DexcludeGroupIds=org.openjfx
+if [ -x ./mvnw ]; then
+    MVN_CMD=./mvnw
+else
+    MVN_CMD=mvn
+fi
+$MVN_CMD dependency:build-classpath -Dmdep.outputFile=cp.txt -q -DincludeScope=runtime -DexcludeGroupIds=org.openjfx
 CLASSPATH=$(cat cp.txt):target/FileVault-shaded.jar
 rm cp.txt
 

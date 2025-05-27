@@ -58,15 +58,15 @@ public class AuthController {
     @FXML
     private Button toggleFormButton;
     
-    /** App logo image */
+    /** App logo Bild */
     @FXML
     private ImageView logoImage;
     
-    /** Login button */
+    /** Login-Button */
     @FXML
     private Button loginButton;
     
-    /** Register button */
+    /** Registrierungs-Button */
     @FXML
     private Button registerButton;
     
@@ -84,7 +84,7 @@ public class AuthController {
         LoggingUtil.logInfo("AuthController", "User exists: " + userExists);
 
         if (userExists) {
-            toggleFormButton.setVisible(false); // Hide the "Konto erstellen" button if a user exists
+            toggleFormButton.setVisible(false); // Verstecke den "Konto erstellen" Button, wenn ein Benutzer existiert
         } else {
             toggleForm();
         }
@@ -94,48 +94,48 @@ public class AuthController {
     }
     
     /**
-     * Applies entry animations to login screen elements.
+     * Startet die Einführungsanimationen für das Login-Formular.
      */
     private void applyEntryAnimations() {
-        // Logo animation - scale and fade with more dramatic start
+        // Logo Animation - Skalierung und Fade-In mit dramatischeren Start
         logoImage.setScaleX(0.2);
         logoImage.setScaleY(0.2);
         logoImage.setOpacity(0);
-        logoImage.setRotate(-10);  // Slight initial rotation for more epic effect
+        logoImage.setRotate(-10);  // Leichte Anfangsrotation für dramatischerer Effekt
         
-        ScaleTransition scaleLogo = new ScaleTransition(Duration.millis(500), logoImage);  // Faster animation
-        scaleLogo.setToX(1.2);  // Overshoot scale for bounce effect
+        ScaleTransition scaleLogo = new ScaleTransition(Duration.millis(500), logoImage);  // Schnellere Animation
+        scaleLogo.setToX(1.2);  // Überschwingen der Skalierung für einen Sprung-Effekt
         scaleLogo.setToY(1.2);
-        scaleLogo.setDelay(Duration.millis(100));  // Shorter delay
+        scaleLogo.setDelay(Duration.millis(100));  // Kürzere Verzögerung
         
         RotateTransition rotateLogo = new RotateTransition(Duration.millis(500), logoImage);
-        rotateLogo.setToAngle(0);  // Rotate to normal
+        rotateLogo.setToAngle(0);  // Zurück zur normalen Rotation
         rotateLogo.setDelay(Duration.millis(100));
         
         ScaleTransition scaleBackLogo = new ScaleTransition(Duration.millis(200), logoImage);
-        scaleBackLogo.setToX(1.0);  // Back to normal scale (bounce effect)
+        scaleBackLogo.setToX(1.0);  // Zurück zur normalen Skalierung (Sprung-Effekt)
         scaleBackLogo.setToY(1.0);
         scaleBackLogo.setDelay(Duration.millis(500));
         
-        FadeTransition fadeLogo = new FadeTransition(Duration.millis(400), logoImage);  // Faster fade
+        FadeTransition fadeLogo = new FadeTransition(Duration.millis(400), logoImage);  // Schnellere Fade-In
         fadeLogo.setToValue(1.0);
-        fadeLogo.setDelay(Duration.millis(100));  // Shorter delay
+        fadeLogo.setDelay(Duration.millis(100));  // Kürzere Verzögerung
         
-        // Form container animation - slide up and fade with more dramatic effect
+        // Formularcontainer-Animation - Slide-Up und Fade-In mit dramatischerem Effekt
         Node formContainer = loginForm.getParent();
         formContainer.setOpacity(0);
-        formContainer.setTranslateY(100);  // Start from further down for more dramatic slide
+        formContainer.setTranslateY(100);  // Start von weiter unten für dramatischerer Slide-Effekt
         
-        TranslateTransition slideForm = new TranslateTransition(Duration.millis(500), formContainer);  // Faster slide
+        TranslateTransition slideForm = new TranslateTransition(Duration.millis(500), formContainer);  // Schnellere Animation
         slideForm.setToY(0);
-        slideForm.setDelay(Duration.millis(300));  // Shorter delay
-        slideForm.setInterpolator(Interpolator.EASE_OUT);  // Smoother deceleration
+        slideForm.setDelay(Duration.millis(300));  // Kürzere Verzögerung
+        slideForm.setInterpolator(Interpolator.EASE_OUT);  // Glattere Abbremsung
         
-        FadeTransition fadeForm = new FadeTransition(Duration.millis(400), formContainer);  // Faster fade
+        FadeTransition fadeForm = new FadeTransition(Duration.millis(400), formContainer);  // Schnellere Fade-In
         fadeForm.setToValue(1.0);
-        fadeForm.setDelay(Duration.millis(300));  // Shorter delay
+        fadeForm.setDelay(Duration.millis(300));  // Kürzere Verzögerung
         
-        // Play animations
+        // Animationen abspielen
         ParallelTransition logoEntryAnimation = new ParallelTransition(scaleLogo, fadeLogo, rotateLogo);
         ParallelTransition formAnimation = new ParallelTransition(slideForm, fadeForm);
         
@@ -157,16 +157,16 @@ public class AuthController {
             showMessage("Bitte geben Sie Ihr Passwort ein", true);
             LoggingUtil.logError("AuthController", "Login failed: Password field is empty.");
             
-            // Shake animation for empty field
+            // Shaking Animation für leeres Feld
             applyShakeAnimation(passwordField);
             return;
         }
         
-        // Disable login button and show loading animation
+        // Deaktiviere den Login-Button und zeige die Ladeanimation an
         loginButton.setDisable(true);
         loginButton.setText("Anmelden...");
         
-        // Add slight delay to show the loading state
+        // Füge eine leichte Verzögerung hinzu, um den Ladezustand anzuzeigen
         PauseTransition loadingDelay = new PauseTransition(Duration.millis(500));
         loadingDelay.setOnFinished(event -> {
             boolean authenticated = UserManager.getInstance().authenticate(password);
@@ -178,7 +178,7 @@ public class AuthController {
                     showMessage("Anmeldung erfolgreich!", false);
                     LoggingUtil.logInfo("AuthController", "Login successful.");
                     
-                    // Apply exit animation before transition
+                    // Animationen bevor Übergang
                     applyExitAnimation();
                     
                 } catch (Exception e) {
@@ -193,7 +193,7 @@ public class AuthController {
                 showMessage("Ungültiges Passwort", true);
                 LoggingUtil.logError("AuthController", "Login failed: Invalid password.");
                 
-                // Shake animation for wrong password
+                // Shaking Animation für falsches Passwort
                 applyShakeAnimation(passwordField);
             }
         });
@@ -201,7 +201,7 @@ public class AuthController {
     }
     
     /**
-     * Applies a shake animation to a node to indicate error.
+     * Wendet eine Shaking-Animation auf einen Knoten an, um einen Fehler anzuzeigen.
      */
     private void applyShakeAnimation(Node node) {
         TranslateTransition shake = new TranslateTransition(Duration.millis(50), node);
@@ -213,30 +213,30 @@ public class AuthController {
     }
     
     /**
-     * Applies exit animation before transitioning to main view.
+     * Wendet eine Ausgangsanimation vor dem Übergang zur Hauptansicht an.
      */
     private void applyExitAnimation() {
-        // Fade out everything except the logo
+        // Fade-Out alles außer dem Logo
         Node formContainer = loginForm.getParent();
         
-        FadeTransition fadeOutForm = new FadeTransition(Duration.millis(200), formContainer);  // Faster fade out
+        FadeTransition fadeOutForm = new FadeTransition(Duration.millis(200), formContainer);  // Schnellere Fade-Out
         fadeOutForm.setToValue(0.0);
         
-        // Scale up and fade out logo last with more dramatic effect
-        ScaleTransition scaleLogo = new ScaleTransition(Duration.millis(300), logoImage);  // Faster scale
-        scaleLogo.setToX(1.8);  // Scale up more for dramatic effect
+        // Skalieren und Fade-Out des Logos mit dramatischerem Effekt
+        ScaleTransition scaleLogo = new ScaleTransition(Duration.millis(300), logoImage);  // Schnellere Animation
+        scaleLogo.setToX(1.8);  // Skalieren mehr für dramatischerer Effekt
         scaleLogo.setToY(1.8);
-        scaleLogo.setDelay(Duration.millis(150));  // Shorter delay
+        scaleLogo.setDelay(Duration.millis(150));  // Kürzere Verzögerung
         
         RotateTransition rotateLogo = new RotateTransition(Duration.millis(300), logoImage);
-        rotateLogo.setToAngle(15);  // Rotate slightly for effect
+        rotateLogo.setToAngle(15);  // Leichte Rotation für dramatischerer Effekt
         rotateLogo.setDelay(Duration.millis(150));
         
-        FadeTransition fadeLogo = new FadeTransition(Duration.millis(250), logoImage);  // Faster fade
+        FadeTransition fadeLogo = new FadeTransition(Duration.millis(250), logoImage);  // Schnellere Fade-Out
         fadeLogo.setToValue(0.0);
-        fadeLogo.setDelay(Duration.millis(200));  // Shorter delay
+        fadeLogo.setDelay(Duration.millis(200));  // Kürzere Verzögerung
         
-        // Sequence the animations
+        // Animationen in paralleler Reihenfolge
         ParallelTransition logoAnimation = new ParallelTransition(scaleLogo, fadeLogo, rotateLogo);
         
         SequentialTransition exitSequence = new SequentialTransition(fadeOutForm, logoAnimation);
@@ -267,7 +267,7 @@ public class AuthController {
             LoggingUtil.logError("AuthController", "Registration failed: Empty password fields.");
             showMessage("Bitte geben Sie Ihr Passwort ein und bestätigen Sie es", true);
             
-            // Apply shake animation to empty fields
+            // Wendet eine Shaking-Animation auf leere Felder an
             if (newPassword.isEmpty()) applyShakeAnimation(newPasswordField);
             if (confirmPassword.isEmpty()) applyShakeAnimation(confirmPasswordField);
             return;
@@ -287,11 +287,11 @@ public class AuthController {
             return;
         }
 
-        // Disable register button and show loading state
+        // Deaktiviere den Registrierungs-Button und zeige den Ladezustand an
         registerButton.setDisable(true);
         registerButton.setText("Erstelle Konto...");
         
-        // Add slight delay to show loading state
+        // Füge eine leichte Verzögerung hinzu, um den Ladezustand anzuzeigen
         PauseTransition loadingDelay = new PauseTransition(Duration.millis(500));
         loadingDelay.setOnFinished(event -> {
             try {
@@ -300,9 +300,9 @@ public class AuthController {
                 showMessage("Konto erfolgreich erstellt!", false);
                 LoggingUtil.logInfo("AuthController", "User registered successfully.");
 
-                toggleFormButton.setVisible(false); // Hide the "Konto erstellen" button after user creation
+                toggleFormButton.setVisible(false); // Verstecke den "Konto erstellen" Button nach der Benutzerregistrierung
 
-                // Apply success animation and toggle to login form
+                // Wendet eine Erfolgsanimation an und wechselt zur Login-Ansicht
                 ScaleTransition successPulse = new ScaleTransition(Duration.millis(300), registerForm);
                 successPulse.setToX(1.05);
                 successPulse.setToY(1.05);
@@ -331,7 +331,7 @@ public class AuthController {
         LoggingUtil.logInfo("AuthController", "Toggling form. Current view: " + (isLoginView ? "Login" : "Register"));
         isLoginView = !isLoginView;
 
-        // Create animation for transition
+        // Erstelle Animation für den Übergang
         FadeTransition fadeOutCurrent = new FadeTransition(Duration.millis(300), 
             isLoginView ? registerForm : loginForm);
         fadeOutCurrent.setToValue(0);
@@ -350,10 +350,10 @@ public class AuthController {
         slideInNew.setFromY(-30);
         slideInNew.setToY(0);
         
-        // Build the animation sequence
+        // Erstelle die Animation-Sequenz
         ParallelTransition parallelOut = new ParallelTransition(fadeOutCurrent, slideOutCurrent);
         parallelOut.setOnFinished(e -> {
-            // Update visibility
+            // Aktualisiere die Sichtbarkeit
             if (isLoginView) {
                 loginForm.setVisible(true);
                 registerForm.setVisible(false);
@@ -364,15 +364,15 @@ public class AuthController {
                 toggleFormButton.setText("Zurück zur Anmeldung");
             }
             
-            // Reset password fields
+            // Setze die Passwortfelder zurück
             passwordField.clear();
             newPasswordField.clear();
             confirmPasswordField.clear();
             
-            // Reset any error messages
+            // Setze alle Fehlermeldungen zurück
             messageLabel.setVisible(false);
             
-            // Continue with the animation for the newly visible form
+            // Führe die Animation für das neu sichtbare Formular aus
             ParallelTransition parallelIn = new ParallelTransition(fadeInNew, slideInNew);
             parallelIn.play();
         });
@@ -398,7 +398,7 @@ public class AuthController {
             messageLabel.getStyleClass().add("success-text");
         }
         
-        // Animate the message appearance
+        // Animiert das Auftauchen der Nachricht
         messageLabel.setOpacity(0);
         messageLabel.setVisible(true);
         
@@ -414,7 +414,7 @@ public class AuthController {
     public void handleLogoClick() {
         LoggingUtil.logInfo("AuthController", "Logo clicked. Opening GitHub repository.");
         try {
-            // Check which operating system is running
+            // Überprüft, welches Betriebssystem ausgeführt wird
             String os = System.getProperty("os.name").toLowerCase();
             String repoUrl = "https://github.com/GulfGulfinson/fileVault";
             
@@ -433,10 +433,10 @@ public class AuthController {
                 throw new UnsupportedOperationException("Ihr Betriebssystem wird nicht unterstützt.");
             }
             
-            // Start the process
+            // Starte den Prozess
             processBuilder.start();
             
-            // Apply a brief animation to show feedback
+            // Wendet eine kurze Animation an, um Feedback zu zeigen
             RotateTransition rotate = new RotateTransition(Duration.millis(200), logoImage);
             rotate.setByAngle(360);
             rotate.setCycleCount(1);

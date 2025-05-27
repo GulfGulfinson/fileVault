@@ -340,9 +340,9 @@ public class FileStorage {
     }
 
     /**
-     * Retrieves all files from the database.
+     * Liefert alle Dateien aus der Datenbank zurück.
      *
-     * @return A list of all encrypted files.
+     * @return Eine Liste aller verschlüsselten Dateien.
      */
     public List<EncryptedFile> getAllFiles() {
         List<EncryptedFile> files = new ArrayList<>();
@@ -383,10 +383,10 @@ public class FileStorage {
     }
 
     /**
-     * Retrieves files by folder ID.
+     * Liefert Dateien nach Ordner-ID zurück.
      *
-     * @param folderId The ID of the folder.
-     * @return A list of files in the specified folder.
+     * @param folderId Die ID des Ordners.
+     * @return Eine Liste der Dateien im angegebenen Ordner.
      */
     public List<EncryptedFile> getFilesByFolderId(int folderId) {
         List<EncryptedFile> files = new ArrayList<>();
@@ -431,11 +431,11 @@ public class FileStorage {
     }
 
     /**
-     * Creates a new file record in the database.
+     * Erstellt eine neue Dateirekord in der Datenbank.
      *
-     * @param fileName The name of the file.
-     * @param folderId The ID of the folder where the file belongs.
-     * @return The created EncryptedFile object.
+     * @param fileName Der Name der Datei.
+     * @param folderId Die ID des Ordners, in dem die Datei gehört.
+     * @return Die erstellte EncryptedFile-Objekt.
      */
     public EncryptedFile createFileRecord(String fileName, int folderId) {
         try (Connection conn = DatabaseManager.getConnection();

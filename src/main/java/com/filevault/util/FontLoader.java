@@ -5,15 +5,15 @@ import java.io.InputStream;
 import javafx.scene.text.Font;
 
 /**
- * Utility class to load and register custom fonts.
+ * Utility-Klasse zum Laden und Registrieren benutzerdefinierter Schriftarten.
  */
 public class FontLoader {
     
     private static boolean fontsLoaded = false;
     
     /**
-     * Loads and registers all custom fonts used in the application.
-     * This method should be called once at application startup.
+     * Lädt und registriert alle benutzerdefinierten Schriftarten, die in der Anwendung verwendet werden.
+     * Diese Methode sollte einmal beim Start der Anwendung aufgerufen werden.
      */
     public static void loadFonts() {
         if (fontsLoaded) {
@@ -21,7 +21,7 @@ public class FontLoader {
         }
         
         try {
-            // Load Material Icons font
+            // Lade Material Icons Schriftart
             InputStream materialIconsStream = FontLoader.class.getResourceAsStream(
                     "/com/filevault/icons/material-icons.woff2");
             
@@ -39,10 +39,10 @@ public class FontLoader {
     }
     
     /**
-     * Gets the character code for a specific Material Icon name.
-     * 
-     * @param iconName the name of the Material Icon
-     * @return the Unicode character for the icon
+     * Gibt den Zeichencode für einen bestimmten Material Icon-Namen zurück.
+     *
+     * @param iconName Der Name des Material Icons
+     * @return Das Unicode-Zeichen für das Icon
      */
     public static String getMaterialIcon(String iconName) {
         switch (iconName) {

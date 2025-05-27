@@ -81,19 +81,19 @@ class FoldersHandlerTest {
      */
     @Test
     void testListFolders() throws IOException {
-        // Start the server
+        // Starte den Server
         startServer();
         
-        // Create a GET request to the folders endpoint
+        // Erstelle eine GET-Anfrage an den Folders-Endpunkt
         URL url = new URL("http://localhost:" + TEST_PORT + "/api/folders");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Authorization", validToken);
         
-        // Send the request
+        // Sende die Anfrage
         int responseCode = connection.getResponseCode();
         
-        // We expect a 200 OK response
+        // Wir erwarten eine 200 OK-Antwort
         assertEquals(200, responseCode, "Should get 200 OK when listing folders");
     }
     
@@ -103,19 +103,19 @@ class FoldersHandlerTest {
      */
     @Test
     void testFolderEndpointWithInvalidToken() throws IOException {
-        // Start the server
+        // Starte den Server
         startServer();
         
-        // Create a GET request to the folders endpoint
+        // Erstelle eine GET-Anfrage an den Folders-Endpunkt
         URL url = new URL("http://localhost:" + TEST_PORT + "/api/folders");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Authorization", "invalid-token");
         
-        // Send the request
+        // Sende die Anfrage
         int responseCode = connection.getResponseCode();
         
-        // We expect a 401 Unauthorized response
+        // Wir erwarten eine 401 Unauthorized-Antwort
         assertEquals(401, responseCode, "Should get 401 Unauthorized with invalid token");
     }
     
@@ -125,18 +125,18 @@ class FoldersHandlerTest {
      */
     @Test
     void testFolderEndpointWithNoToken() throws IOException {
-        // Start the server
+        // Starte den Server
         startServer();
         
-        // Create a GET request to the folders endpoint
+        // Erstelle eine GET-Anfrage an den Folders-Endpunkt
         URL url = new URL("http://localhost:" + TEST_PORT + "/api/folders");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         
-        // Send the request
+        // Sende die Anfrage
         int responseCode = connection.getResponseCode();
         
-        // We expect a 401 Unauthorized response
+        // Wir erwarten eine 401 Unauthorized-Antwort
         assertEquals(401, responseCode, "Should get 401 Unauthorized with no token");
     }
     
@@ -152,7 +152,7 @@ class FoldersHandlerTest {
             }
         });
         
-        // Give the server time to start
+        // Gib dem Server Zeit zum Starten
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {

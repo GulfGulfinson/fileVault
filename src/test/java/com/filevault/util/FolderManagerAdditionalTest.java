@@ -33,14 +33,14 @@ public class FolderManagerAdditionalTest {
      */
     @BeforeEach
     void setUp() throws Exception {
-        // Initialize test database
+        // Initialisiert die Testdatenbank
         DatabaseManager.initDatabase(true);
         
-        // Create test data directory
+        // Erstellt das Testdatenverzeichnis
         testDataDir = Paths.get(System.getProperty("user.home"), ".filevault", "test_data");
         Files.createDirectories(testDataDir);
         
-        // Get FolderManager instance
+        // Erstellt eine Instanz von FolderManager
         folderManager = FolderManager.getInstance();
         folderManager.initialize();
     }
@@ -51,10 +51,10 @@ public class FolderManagerAdditionalTest {
      */
     @AfterEach
     void tearDown() throws Exception {
-        // Close database connections
+        // Schließt Datenbankverbindungen
         DatabaseManager.closeConnections();
         
-        // Clean up test data directory
+        // Bereinigt das Testdatenverzeichnis
         if (Files.exists(testDataDir)) {
             Files.walk(testDataDir)
                 .map(Path::toFile)
@@ -62,7 +62,7 @@ public class FolderManagerAdditionalTest {
             Files.deleteIfExists(testDataDir);
         }
         
-        // Delete test database
+        // Löscht die Testdatenbank
         DatabaseManager.deleteTestDatabase();
     }
     
@@ -72,8 +72,8 @@ public class FolderManagerAdditionalTest {
      */
     @Test
     void testCreateDataDirectory() {
-        // The createDataDirectory method is called during initialize()
-        // We just need to verify the directory exists
+        // Die createDataDirectory-Methode wird während der Initialisierung aufgerufen
+        // Wir müssen nur überprüfen, ob das Verzeichnis existiert
         Path dataDir = Paths.get(System.getProperty("user.home"), ".filevault", "data");
         assertTrue(Files.exists(dataDir), "Datenverzeichnis sollte nach der Initialisierung existieren");
     }
@@ -100,10 +100,10 @@ public class FolderManagerAdditionalTest {
         VirtualFolder rootFolder = folderManager.createFolder("ReloadRoot", null);
         folderManager.createFolder("ReloadChild", rootFolder.getId());
         
-        // Get the initial count
+        // Hole die Anfangszahl
         int initialCount = folderManager.getAllFolders().size();
         
-        // Create another folder directly in the database to simulate external changes
+        // Erstelle einen anderen Ordner direkt in der Datenbank, um externe Änderungen zu simulieren
         try {
             var conn = DatabaseManager.getConnection();
             var stmt = conn.prepareStatement(
@@ -117,14 +117,14 @@ public class FolderManagerAdditionalTest {
             fail("Fehler beim Erstellen des externen Ordners: " + e.getMessage());
         }
         
-        // Reload from database
+        // Neuladen aus der Datenbank
         folderManager.reloadFromDatabase();
         
-        // Check that the new folder was loaded
+        // Überprüfen, ob der neue Ordner geladen wurde
         int newCount = folderManager.getAllFolders().size();
         assertEquals(initialCount + 1, newCount, "Nach dem Neuladen sollte ein zusätzlicher Ordner vorhanden sein");
         
-        // Verify the folder exists by name
+        // Überprüfen, ob der Ordner existiert
         VirtualFolder externalFolder = folderManager.getFolderByName("ExternalFolder");
         assertNotNull(externalFolder, "Der extern erstellte Ordner sollte gefunden werden");
         assertEquals("Created externally", externalFolder.getDescription());
@@ -140,12 +140,12 @@ public class FolderManagerAdditionalTest {
         String uniqueName = "UniqueFolderName_" + System.currentTimeMillis();
         folderManager.createFolder(uniqueName, null);
         
-        // Try to find it by name
+        // Versuche es anhand des Namens zu finden
         VirtualFolder found = folderManager.getFolderByName(uniqueName);
         assertNotNull(found, "Ordner sollte anhand des Namens gefunden werden");
         assertEquals(uniqueName, found.getName(), "Der gefundene Ordner sollte den korrekten Namen haben");
         
-        // Try to find a non-existent folder
+        // Versuche es anhand eines nicht existierenden Ordners zu finden
         VirtualFolder notFound = folderManager.getFolderByName("NonExistentFolder");
         assertNull(notFound, "Bei nicht existierendem Ordnernamen sollte null zurückgegeben werden");
     }
@@ -156,21 +156,21 @@ public class FolderManagerAdditionalTest {
      */
     @Test
     void testGetSubfolders() {
-        // Create a root folder
+        // Erstelle einen Stammordner
         VirtualFolder root = folderManager.createFolder("SubfolderRoot", null);
         
-        // Create some subfolders
+        // Erstelle einige Unterordner
         folderManager.createFolder("SubChild1", root.getId());
         folderManager.createFolder("SubChild2", root.getId());
         folderManager.createFolder("SubChild3", root.getId());
         
-        // Get subfolders
+        // Hole die Unterordner
         List<VirtualFolder> subfolders = folderManager.getSubfolders(root.getId());
         
-        // Verify
+        // Überprüfen
         assertEquals(3, subfolders.size(), "Es sollten 3 Unterordner vorhanden sein");
         
-        // Verify names
+        // Überprüfen die Namen
         boolean foundChild1 = false;
         boolean foundChild2 = false;
         boolean foundChild3 = false;

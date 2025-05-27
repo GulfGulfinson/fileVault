@@ -70,10 +70,10 @@ public class FolderManager {
         LoggingUtil.logInfo("FolderManager", "Creating base folder structure.");
         folders.clear();
 
-        // Create a root folder explicitly with parent_id as NULL
+        // Erstelle explizit einen Root-Ordner mit parent_id als NULL
         VirtualFolder rootFolder = createFolder("Tresor", null);
 
-        // Create base folders under the root folder
+        // Erstelle Basisordner unter dem Root-Ordner
         createFolder("Dokumente", rootFolder.getId());
         createFolder("Bilder", rootFolder.getId());
         createFolder("Videos", rootFolder.getId());
@@ -110,7 +110,7 @@ public class FolderManager {
              PreparedStatement stmt = conn.prepareStatement("SELECT * FROM folders ORDER BY name");
              ResultSet rs = stmt.executeQuery()) {
             
-            // First, create all folders
+            // Erstelle zunächst alle Ordner
             while (rs.next()) {
                 Integer parentId = null;
                 if (rs.getObject("parent_id") != null) {
@@ -127,7 +127,7 @@ public class FolderManager {
                 folders.add(folder);
             }
             
-            // Then, build the parent-child relationships
+            // Dann, erstelle die Eltern-Kind-Beziehungen
             for (VirtualFolder folder : folders) {
                 if (folder.getParentId() != null) {
                     for (VirtualFolder potentialParent : folders) {
@@ -155,10 +155,10 @@ public class FolderManager {
     }
     
     /**
-     * Checks if a folder with the same name exists under the same parent.
-     * @param name The name of the folder to check.
-     * @param parentId The ID of the parent folder.
-     * @return true if a folder with the same name exists, false otherwise.
+     * Checkt ob ein Ordner mit dem gleichen Namen unter dem gleichen Elternteil existiert. 
+     * @param name Der Name des Ordners, den wir prüfen.
+     * @param parentId Die ID des Elternteils des Ordners.
+     * @return true, wenn ein Ordner mit dem gleichen Namen existiert, false sonst.
      */
     private boolean isDuplicateFolderName(String name, Integer parentId) {
         for (VirtualFolder folder : folders) {
@@ -282,7 +282,7 @@ public class FolderManager {
         }
 
         try {
-            // Disable auto-commit mode
+            // Deaktiviere auto-commit-Modus
             DatabaseManager.getConnection().setAutoCommit(false);
             
             // Lösche alle Dateien im Ordner
@@ -302,7 +302,7 @@ public class FolderManager {
             // Commit the transaction
             DatabaseManager.getConnection().commit();
             
-            // Remove from parent's children list if it has a parent
+            // Entferne aus der Liste der Eltern, wenn es einen Elternteil gibt
             if (folder.getParentId() != null) {
                 for (VirtualFolder parent : folders) {
                     if (parent.getId() == folder.getParentId()) {
@@ -312,15 +312,15 @@ public class FolderManager {
                 }
             }
             
-            // Remove from local list
+            // Entferne aus der lokalen Liste
             folders.remove(folder);
             
-            // Reset auto-commit mode
+            // Setze auto-commit-Modus zurück
             DatabaseManager.getConnection().setAutoCommit(true);
             LoggingUtil.logInfo("FolderManager", "Folder deleted successfully: " + folder.getName());
         } catch (SQLException e) {
             try {
-                // Rollback in case of error
+                // Rollback falls ein Fehler auftritt
                 DatabaseManager.getConnection().rollback();
                 DatabaseManager.getConnection().setAutoCommit(true);
             } catch (SQLException rollbackEx) {
@@ -343,16 +343,16 @@ public class FolderManager {
         LoggingUtil.logInfo("FolderManager", "Recursively deleting folder: " + folder.getName());
 
         try {
-            // Disable auto-commit mode
+            // Deaktiviere auto-commit-Modus
             DatabaseManager.getConnection().setAutoCommit(false);
             
             // Rekursiv alle Unterordner und deren Dateien löschen
             deleteRecursively(folder);
             
-            // Commit the transaction
+            // Bestätige die Transaktion
             DatabaseManager.getConnection().commit();
             
-            // Remove from parent's children list if it has a parent
+            // Entferne aus der Liste der Eltern, wenn es einen Elternteil gibt
             if (folder.getParentId() != null) {
                 for (VirtualFolder parent : folders) {
                     if (parent.getId() == folder.getParentId()) {
@@ -362,19 +362,19 @@ public class FolderManager {
                 }
             }
             
-            // Remove from local list
+            // Entferne aus der lokalen Liste
             folders.remove(folder);
             
-            // Reset auto-commit mode
+            // Setze auto-commit-Modus zurück
             DatabaseManager.getConnection().setAutoCommit(true);
             LoggingUtil.logInfo("FolderManager", "Folder and all its contents deleted successfully: " + folder.getName());
         } catch (SQLException e) {
             try {
-                // Rollback in case of error
+                // Rollback falls ein Fehler auftritt
                 DatabaseManager.getConnection().rollback();
                 DatabaseManager.getConnection().setAutoCommit(true);
             } catch (SQLException rollbackEx) {
-                LoggingUtil.logError("FolderManager", "Error during rollback: " + rollbackEx.getMessage());
+                LoggingUtil.logError("FolderManager", "Fehler beim Rollback: " + rollbackEx.getMessage());
             }
             LoggingUtil.logError("FolderManager", "Error recursively deleting folder: " + e.getMessage());
             throw new RuntimeException("Fehler beim rekursiven Löschen des Ordners", e);
@@ -396,7 +396,7 @@ public class FolderManager {
         for (VirtualFolder subfolder : subfolders) {
             deleteRecursively(subfolder);
             
-            // Remove from local list
+            // Entferne aus der lokalen Liste
             folders.remove(subfolder);
         }
         
@@ -444,17 +444,17 @@ public class FolderManager {
     }
     
     /**
-     * Gets the path to the data directory
-     * @return The path to the data directory
+     * Gibt den Pfad zum Datenverzeichnis zurück.
+     * @return Der Pfad zum Datenverzeichnis
      */
     public String getDataDirectoryPath() {
         return Paths.get(System.getProperty("user.home"), ".filevault", "data").toString();
     }
     
     /**
-     * Gets a folder by its name.
-     * @param name The name of the folder to find
-     * @return The folder if found, null otherwise
+     * Gibt einen Ordner anhand seines Namens zurück.
+     * @param name Der Name des Ordners, den wir finden.
+     * @return Der Ordner, wenn gefunden, null sonst.
      */
     public VirtualFolder getFolderByName(String name) {
         for (VirtualFolder folder : folders) {
