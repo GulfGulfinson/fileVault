@@ -112,7 +112,7 @@
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk18on</artifactId>
-            <version>1.77</version>
+            <version>1.81</version>
         </dependency>
         
         <!-- Mockito for mocking dependencies in tests -->
